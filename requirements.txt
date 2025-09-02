@@ -1,0 +1,9 @@
+gradio
+transformers
+torch
+pillow
+pandas
+requests
+numpy
+matplotlib
+seaborn
