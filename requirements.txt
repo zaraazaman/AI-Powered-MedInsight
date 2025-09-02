@@ -5,5 +5,4 @@ pillow
 pandas
 requests
 numpy
-matplotlib
-seaborn
+
