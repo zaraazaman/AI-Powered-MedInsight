@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime   #to mention date time too with the generated report
 
 def write_report(patient_name: str, age: str, gender: str,
                  illnesses: str, diagnosis: str, treatment: str) -> str:
@@ -9,7 +9,6 @@ def write_report(patient_name: str, age: str, gender: str,
         diagnosis_points = "\n".join([f"- {line.strip()}" for line in diagnosis.split('.') if line.strip()])
     else:
         diagnosis_points = "Not provided"
-
     if treatment:
         treatment_points = "\n".join([f"- {line.strip()}" for line in treatment.split('.') if line.strip()])
     else:
