@@ -5,12 +5,15 @@ import os
 from datetime import datetime
 from backend.med_model.model_loader import load_model
 
+
+
 HISTORY_PATH = "backend/patient_data/history.csv"
 REPORTS_DIR = "backend/reports/"
 os.makedirs(REPORTS_DIR, exist_ok=True)
 
+
+
 def update_health_log(patient_id, vitals_dict):
-    """Append new vitals to the patient's health history."""
     df = pd.DataFrame([{
         "patient_id": patient_id,
         "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M"),
@@ -21,23 +24,22 @@ def update_health_log(patient_id, vitals_dict):
     else:
         df.to_csv(HISTORY_PATH, mode='a', header=False, index=False)
 
+
 def analyze_patient_history(patient_id):
-    """Return a summary and a chart of the patient's health trends."""
     if not os.path.exists(HISTORY_PATH):
         return "No health data found.", None
 
     df = pd.read_csv(HISTORY_PATH)
     df = df[df["patient_id"] == patient_id]
-
     if df.empty:
         return "No entries found for this patient.", None
-
     summary = summarize_trends_llm(df)
     chart_path = generate_health_chart(df, patient_id)
     return summary, chart_path
 
+
+
 def generate_health_chart(df, patient_id):
-    """Generate a line plot of patient vitals."""
     df['timestamp'] = pd.to_datetime(df['timestamp'])
 
     plt.figure(figsize=(10, 5))
@@ -69,19 +71,18 @@ def summarize_trends_llm(df):
         recent = df.tail(3).to_dict(orient="records")
     except Exception as e:
         return f"⚠️ Error extracting recent data: {e}"
-
     prompt = (
         "You are a medical assistant. Analyze the following health logs and summarize the patient's current condition.\n\n"
         f"{recent}\n\n"
         "Provide any patterns, improvements, or worsening symptoms. "
         "Also provide further guidelines and recommendations to the patient based on their health."
     )
-
     try:
         response = model.generate_response(prompt)
         return response.strip()
     except Exception as e:
         return f"⚠️ LLM Error: {e}"
+
 
 def generate_monitoring_report(patient_id: str) -> str:
     if not os.path.exists(HISTORY_PATH):
@@ -89,8 +90,6 @@ def generate_monitoring_report(patient_id: str) -> str:
 
     df = pd.read_csv(HISTORY_PATH)
     df = df[df["patient_id"] == patient_id]
-
     if df.empty:
         return "❌ No entries found for this patient."
-
     return summarize_trends_llm(df)
