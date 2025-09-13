@@ -32,9 +32,6 @@ biv_model = AutoModel.from_pretrained(biv_model_name, trust_remote_code=True)
 
 
 def analyze_with_biovil(image, question):
-    """
-    Use BioViL-T to compute similarity between an X-ray image and a user prompt.
-    """
     try:
         inputs = biv_processor(
             text=[question],
@@ -59,11 +56,6 @@ def analyze_with_biovil(image, question):
 
 
 def analyze_medical_image(image, image_type, symptoms=""):
-    """
-    Hybrid medical image analysis:
-    - If user input is a QUESTION, use BioViL-T to match image with text.
-    - Otherwise, run basic pixel-level stats (brightness/contrast) + correlation.
-    """
     if image is None:
         return "❌ Upload an image first before analysis."
     
@@ -221,9 +213,7 @@ def create_report(name, age, gender, illnesses, diagnosis, treatment):
 def user_interface():
     with gr.Blocks(css="""
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-    
-    /* Global Styles */
-    * {
+        * {
         font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
         box-sizing: border-box;
     }
@@ -244,7 +234,6 @@ def user_interface():
         box-shadow: none;
     }
 
-    /* Enhanced Header with Subtle Animation */
     #header {
         background: linear-gradient(135deg, #1e40af 0%, #3730a3 100%);
         color: white !important;
@@ -283,7 +272,6 @@ def user_interface():
         100% { left: 100%; }
     }
 
-    /* Professional Button Styling */
     button {
         background: linear-gradient(135deg, #1e40af 0%, #3730a3 100%) !important;
         border: none !important;
@@ -328,7 +316,6 @@ def user_interface():
         height: 300px;
     }
 
-    /* Enhanced Input Styling */
     textarea, input, .gr-textbox, .gr-dropdown {
         border-radius: 12px !important;
         border: 2px solid #e2e8f0 !important;
@@ -345,8 +332,6 @@ def user_interface():
         background: white !important;
         transform: translateY(-1px) !important;
     }
-
-    /* Professional Card Styling */
     .content-card {
         background: rgba(255, 255, 255, 0.98);
         border-radius: 16px;
@@ -381,8 +366,6 @@ def user_interface():
     .content-card:hover::before {
         opacity: 1;
     }
-
-    /* Statistics Cards */
     .stat-card {
         background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.95) 100%);
         border-radius: 16px;
@@ -439,7 +422,6 @@ def user_interface():
         letter-spacing: 0.05em;
     }
 
-    /* Enhanced Back Button */
     .back-button {
         background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%) !important;
         font-size: 14px !important;
@@ -455,7 +437,6 @@ def user_interface():
         transform: translateX(-2px) translateY(-1px) !important;
     }
 
-    /* Severity Slider Enhancement */
     #severity-slider {
         padding: 20px;
         background: rgba(255, 255, 255, 0.5);
@@ -497,7 +478,6 @@ def user_interface():
         display: block;
     }
 
-    /* Analysis Mode Radio Buttons */
     .gr-radio {
         background: rgba(255, 255, 255, 0.7);
         border-radius: 12px;
@@ -505,14 +485,12 @@ def user_interface():
         border: 2px solid #e2e8f0;
     }
 
-    /* Accordion Styling */
     .gr-accordion {
         border: 2px solid #e2e8f0 !important;
         border-radius: 12px !important;
         background: rgba(255, 255, 255, 0.95) !important;
     }
 
-    /* Image Upload Area */
     .gr-image {
         border: 2px dashed #cbd5e1 !important;
         border-radius: 12px !important;
@@ -525,7 +503,6 @@ def user_interface():
         background: rgba(239, 246, 255, 0.8) !important;
     }
 
-    /* Chat Styling */
     .chat-bubble {
         max-width: 75%;
         padding: 15px 20px;
@@ -555,7 +532,6 @@ def user_interface():
         text-align: right;
     }
    
-    /* Breadcrumb Styling */
     .breadcrumb {
         background: rgba(255, 255, 255, 0.8);
         padding: 12px 20px;
@@ -567,7 +543,6 @@ def user_interface():
         border: 1px solid rgba(226, 232, 240, 0.6);
     }
 
-    /* Professional Footer */
     #footer {
         background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.95) 100%);
         border-radius: 0;
@@ -588,7 +563,6 @@ def user_interface():
         text-decoration: underline;
     }
 
-    /* Loading Animation */
     .loading {
         position: relative;
     }
@@ -628,7 +602,6 @@ def user_interface():
         }
     }
 
-    /* Professional Typography */
     h1, h2, h3 {
         color: #1e293b;
         font-weight: 600;
@@ -640,12 +613,10 @@ def user_interface():
         line-height: 1.7;
     }
 
-    /* Enhanced Focus States */
     *:focus {
         outline: none !important;
     }
 
-    /* Mobile Responsiveness */
     @media (max-width: 768px) {
         .gradio-container {
             padding: 10px;
@@ -680,7 +651,7 @@ def user_interface():
             label=""
         )
 
-        ### === HOME TAB ===
+        #HOME TAB 
         with gr.Column(visible=True) as home_tab:
             gr.HTML("""
             <div id='header' class='fade-in'>
@@ -701,7 +672,6 @@ def user_interface():
             </div>
             """)
             
-            # Enhanced stats dashboard
             with gr.Row():
                 with gr.Column(scale=1):
                     gr.HTML("""
@@ -835,7 +805,7 @@ def user_interface():
                 with gr.Column(scale=1):
                     go_chat = gr.Button("Chat with MedBot", size="lg")
 
-        ### === DIAGNOSIS TAB ===
+        #DIAGNOSIS TAB
         with gr.Column(visible=False) as diagnosis_tab:
             gr.HTML("<div class='breadcrumb'>Home ▸ Diagnosis & Treatment</div>")
             gr.HTML("""
@@ -1031,7 +1001,7 @@ def user_interface():
                     outputs=[textual_section, image_section]
                 )
 
-        ### === REPORT TAB ===
+        #REPORT TAB
         with gr.Column(visible=False) as report_tab:
             gr.HTML("<div class='breadcrumb'>Home ▸ Diagnosis & Treatment ▸ Medical Report</div>")
             gr.HTML("""
@@ -1146,35 +1116,31 @@ def user_interface():
                 outputs=[final_report_box, download_file]
             )
 
-        ### === CHATBOT TAB ===
+        #CHATBOT TAB
         with gr.Column(visible=False) as chatbot_tab:
             gr.HTML("<div class='breadcrumb'>Home ▸ Medical Learning Assistant</div>")
             gr.HTML("""
             <style>
-            /* === Chat Input Styling - More specific selectors === */
             .chat-input textarea,
             .chat-input input {
-                background-color: #fffaf0 !important; /* Floral white */
-                color: #abc8f7 !important;            /* Dark text */
-                border: none !important;              /* No border */
+                background-color: #fffaf0 !important; 
+                color: #abc8f7 !important;            
+                border: none !important;              
                 border-radius: 12px !important;
                 padding: 8px 12px !important;
-                box-shadow: none !important;          /* Remove any shadow */
+                box-shadow: none !important;        
                 resize: none;
             }
 
-            /* Additional targeting for Gradio textbox */
             .enhanced-textbox textarea {
-                background-color: #fffaf0 !important; /* Floral white */
-                color: #abc8f7 !important;            /* Dark text */
-                border: none !important;              /* No border */
+                background-color: #fffaf0 !important; 
+                color: #abc8f7 !important;            
+                border: none !important;              
                 outline: none !important;
                 box-shadow: none !important;
             }
 
-            /* === Chat Message Bubbles - Multiple selectors for better targeting === */
             
-            /* Gradio chatbot user messages */
             .chatbot .message-wrap.user .message,
             .chatbot .message-wrap.user,
             .chatbot .user,
@@ -1188,7 +1154,6 @@ def user_interface():
                 box-shadow: none !important;
             }
 
-            /* Gradio chatbot bot messages */
             .chatbot .message-wrap.bot .message,
             .chatbot .message-wrap.bot,
             .chatbot .bot,
@@ -1202,7 +1167,6 @@ def user_interface():
                 box-shadow: none !important;
             }
 
-            /* Target all text within chatbot messages */
             .chatbot .message p,
             .chatbot .message span,
             .chatbot .message div,
@@ -1212,7 +1176,6 @@ def user_interface():
                 background: inherit !important;
             }
 
-            /* Override any default gradio user message styling */
             .chatbot [class*="user"] {
                 background-color: #a6cff7 !important;
                 color: #1e293b !important;
@@ -1223,7 +1186,6 @@ def user_interface():
                 color: #1e293b !important;
             }
 
-            /* === Typing animation === */
             .typing-indicator {
                 display: flex;
                 align-items: center;
@@ -1353,14 +1315,11 @@ def user_interface():
             )
 
             ask_button = gr.Button("Ask Question", variant="primary", size="lg")
-
-            # Improved typing animation - using simple text instead of HTML
             typing_message = "AI is thinking..."
 
-            # Backend logic
+
             def show_typing(history, user_input):
-                if user_input.strip():  # Only process if there's actual input
-                    # Add user message and typing indicator
+                if user_input.strip(): 
                     history = history + [(user_input, typing_message)]
                     return history, ""
                 return history, user_input
@@ -1369,10 +1328,8 @@ def user_interface():
                 if history:  # Check if history exists
                     user_input, _ = history[-1]  # get last user message
                     bot_reply = answer_medical_question(user_input)
-                    history[-1] = (user_input, bot_reply)  # replace typing message with real answer
+                    history[-1] = (user_input, bot_reply)  
                 return history
-
-            # Click event
             ask_button.click(
                 fn=show_typing,
                 inputs=[chatbot_box, question_input],
@@ -1383,7 +1340,7 @@ def user_interface():
                 outputs=chatbot_box
             )
 
-            # Enter key event
+        
             question_input.submit(
                 fn=show_typing,
                 inputs=[chatbot_box, question_input],
@@ -1394,8 +1351,6 @@ def user_interface():
                 outputs=chatbot_box
             )
 
-
-        # Navigation functions
         def change_tab(tab_choice):
             return (
                 gr.update(visible=tab_choice == "home"),
@@ -1420,8 +1375,6 @@ def user_interface():
             inputs=tab_selector,
             outputs=chatbot_tab
         )
-
-        # Enhanced footer
         with gr.Row(elem_id="footer", visible=True):
             gr.HTML("""
             <div style="
@@ -1457,7 +1410,6 @@ def user_interface():
             </div>
             """)
 
-        # Navigation button handlers
         def show_home():
             return gr.update(visible=True), gr.update(visible=False), gr.update(visible=False)
 
