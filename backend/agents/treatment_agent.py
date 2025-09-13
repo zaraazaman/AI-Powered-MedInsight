@@ -1,10 +1,14 @@
 import re
 from backend.med_model.model_loader import load_model  
+
+
 def clean_model_output(text):
     text = re.sub(r'\[.*?\]', '', text)
     text = re.sub(r'\(([^)]*(confidence|citation|reference)[^)]*)\)', '', text, flags=re.IGNORECASE)
     return text.strip()
 
+
+#=======
 def generate_treatment(symptoms, diagnosis, model=None):
     model = model or load_model("treatment")
     prompt = f"""
