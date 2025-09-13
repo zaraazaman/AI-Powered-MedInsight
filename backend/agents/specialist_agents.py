@@ -1,13 +1,9 @@
 class CardiologyAgent:
-    """Specialized agent for cardiovascular conditions"""
-    
     def __init__(self, model):
         self.model = model
         self.specialty = "Cardiology"
         
-    def analyze_cardiovascular_symptoms(self, symptoms: str, patient_data: dict = None) -> str:
-        """Analyze symptoms from cardiovascular perspective"""
-        
+    def analyze_cardiovascular_symptoms(self, symptoms: str, patient_data: dict = None) -> str:        
         patient_context = ""
         if patient_data:
             patient_context = f"""
@@ -21,11 +17,8 @@ class CardiologyAgent:
                            
             prompt = f"""
       You are a board-certified cardiologist with 20+ years of experience. Analyze these symptoms for cardiovascular conditions.
-
       {patient_context}
-
       Current Symptoms: {symptoms}
-
       Provide a detailed cardiovascular assessment:
 
       1. **Cardiac Risk Stratification:**
@@ -52,12 +45,10 @@ class CardiologyAgent:
 
       Focus on actionable, evidence-based recommendations.
       """
-        
         return self.model.generate_response(prompt)
+
     
     def assess_chest_pain(self, symptoms: str, patient_data: dict = None) -> str:
-        """Specialized chest pain assessment"""
-        
         prompt = f"""
 You are evaluating a patient with chest pain. Use the standard chest pain assessment protocol.
 
@@ -94,16 +85,14 @@ Provide chest pain assessment using HEART Score approach:
         return self.model.generate_response(prompt)
 
 
-class NeurologyAgent:
-    """Specialized agent for neurological conditions"""
-    
+
+
+class NeurologyAgent:    
     def __init__(self, model):
         self.model = model
         self.specialty = "Neurology"
         
-    def analyze_neurological_symptoms(self, symptoms: str, patient_data: dict = None) -> str:
-        """Analyze symptoms from neurological perspective"""
-        
+    def analyze_neurological_symptoms(self, symptoms: str, patient_data: dict = None) -> str:        
         prompt = f"""
 You are a board-certified neurologist. Analyze these symptoms for neurological conditions.
 
@@ -142,16 +131,13 @@ Focus on systematic, evidence-based neurological approach.
 """
         
         return self.model.generate_response(prompt)
+
     
     def assess_headache(self, symptoms: str, patient_data: dict = None) -> str:
-        """Specialized headache assessment"""
-        
         prompt = f"""
                   You are conducting a headache evaluation using systematic approach.
-
                   Symptoms: {symptoms}
                   Patient Data: {patient_data if patient_data else 'Limited data'}
-
                   Provide headache assessment:
 
                   1. **Headache Classification:**
@@ -186,25 +172,19 @@ Focus on systematic, evidence-based neurological approach.
         return self.model.generate_response(prompt)
 
 
-class PharmacologyAgent:
-    """Specialized agent for medication management and drug interactions"""
-    
+class PharmacologyAgent:    
     def __init__(self, model):
         self.model = model
         self.specialty = "Clinical Pharmacology"
         
     def analyze_medication_safety(self, medications: list, symptoms: str, patient_data: dict = None) -> str:
-        """Analyze medication safety and interactions"""
-        
         med_list = ', '.join(medications) if medications else 'No current medications'
         
         prompt = f"""
                         You are a clinical pharmacist conducting medication therapy management.
-
                         Current Medications: {med_list}
                         Patient Symptoms: {symptoms}
                         Patient Data: {patient_data if patient_data else 'Limited data available'}
-
                         Provide comprehensive medication analysis:
 
                         1. **Drug Interaction Assessment:**
@@ -242,12 +222,9 @@ class PharmacologyAgent:
         
         return self.model.generate_response(prompt)
     
-    def recommend_medication_therapy(self, diagnosis: str, patient_data: dict = None) -> str:
-        """Recommend evidence-based medication therapy"""
-        
+    def recommend_medication_therapy(self, diagnosis: str, patient_data: dict = None) -> str:        
         prompt = f"""
                      You are developing an evidence-based medication therapy plan.
-
                      Diagnosis: {diagnosis}
                      Patient Factors: {patient_data if patient_data else 'Standard adult patient'}
 
@@ -288,21 +265,15 @@ class PharmacologyAgent:
         return self.model.generate_response(prompt)
 
 class PsychiatryAgent:
-    """Specialized agent for mental health and psychiatric evaluation"""
-
     def __init__(self, model):
         self.model = model
         self.specialty = "Psychiatry"
 
     def analyze_psychiatric_symptoms(self, symptoms: str, patient_data: dict = None) -> str:
-        """Analyze symptoms from psychiatric perspective"""
-
         prompt = f"""
                      You are a licensed psychiatrist with experience in diagnosing mental health conditions.
-
                      Patient Symptoms: {symptoms}
                      Patient History: {patient_data if patient_data else 'Limited history available'}
-
                      Provide a psychiatric assessment:
 
                      1. **Primary Concern:**
@@ -326,21 +297,15 @@ class PsychiatryAgent:
 
 
 class PulmonologyAgent:
-    """Specialized agent for respiratory and lung-related conditions"""
-
     def __init__(self, model):
         self.model = model
         self.specialty = "Pulmonology"
 
     def analyze_respiratory_symptoms(self, symptoms: str, patient_data: dict = None) -> str:
-        """Analyze symptoms from respiratory perspective"""
-
         prompt = f"""
                   You are a board-certified pulmonologist. Evaluate the following respiratory symptoms.
-
                   Symptoms: {symptoms}
                   Patient Data: {patient_data if patient_data else 'Limited information'}
-
                   Provide a comprehensive respiratory assessment:
 
                   1. **Possible Diagnoses:**
@@ -366,21 +331,15 @@ class PulmonologyAgent:
 
 
 class GastroenterologyAgent:
-    """Specialized agent for digestive system issues"""
-
     def __init__(self, model):
         self.model = model
         self.specialty = "Gastroenterology"
 
     def analyze_digestive_symptoms(self, symptoms: str, patient_data: dict = None) -> str:
-        """Analyze symptoms from gastroenterological perspective"""
-
         prompt = f"""
                   You are a board-certified gastroenterologist. Analyze the following symptoms related to digestive health.
-
                   Symptoms: {symptoms}
                   Patient Data: {patient_data if patient_data else 'Limited data available'}
-
                   Provide a comprehensive GI assessment:
 
                   1. **Possible Diagnoses:**
@@ -404,18 +363,13 @@ class GastroenterologyAgent:
         return self.model.generate_response(prompt)
 
 class DermatologyAgent:
-    """Specialized agent for skin-related conditions"""
-
     def __init__(self, model):
         self.model = model
         self.specialty = "Dermatology"
 
     def analyze_dermatological_symptoms(self, symptoms: str, patient_data: dict = None) -> str:
-        """Analyze symptoms from a dermatological perspective"""
-
         prompt = f"""
                   You are a board-certified dermatologist. Analyze the following skin-related symptoms.
-
                   Symptoms: {symptoms}
                   Patient Data: {patient_data if patient_data else 'Limited data available'}
 
@@ -442,15 +396,11 @@ class DermatologyAgent:
         return self.model.generate_response(prompt)
 
 class EndocrinologyAgent:
-    """Specialized agent for endocrine system disorders (e.g., diabetes, thyroid issues)"""
-
     def __init__(self, model):
         self.model = model
         self.specialty = "Endocrinology"
 
     def analyze_endocrine_symptoms(self, symptoms: str, patient_data: dict = None) -> str:
-        """Analyze symptoms from an endocrine perspective"""
-
         prompt = f"""
 You are a board-certified endocrinologist. Analyze the following symptoms from an endocrine perspective.
 
@@ -479,21 +429,16 @@ Provide a structured assessment:
 
 
 
-class EmergencyAgent:
-    """Specialized agent for emergency/urgent conditions"""
-    
+class EmergencyAgent:    
     def __init__(self, model):
         self.model = model
         self.specialty = "Emergency Medicine"
         
-    def triage_urgency(self, symptoms: str) -> dict:
-        """Triage patient urgency level"""
-        
+    def triage_urgency(self, symptoms: str) -> dict:        
         prompt = f"""
 You are an emergency medicine physician conducting initial triage.
 
 Patient Symptoms: {symptoms}
-
 Assess urgency level and provide triage decision:
 
 1. **Urgency Level:**
@@ -528,10 +473,7 @@ Respond in JSON format:
     "immediate_actions": ["action1", "action2"]
 }}
 """
-        
         response = self.model.generate_response(prompt)
-        
-        # Try to parse JSON response
         try:
             import json
             json_start = response.find('{')
@@ -540,8 +482,6 @@ Respond in JSON format:
                 return json.loads(response[json_start:json_end])
         except:
             pass
-            
-        # Fallback response
         return {
             "urgency": "LESS_URGENT",
             "disposition": "PRIMARY_CARE", 
