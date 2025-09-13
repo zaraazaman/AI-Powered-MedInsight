@@ -1,10 +1,9 @@
 from backend.med_model.model_loader import load_model
-
-
 med_model = load_model("diagnosis")
 
-def is_input_medical(input_text, task_type=None): 
 
+##actual diagnosis agent working
+def is_input_medical(input_text, task_type=None): 
     prompt = f"""
 You are a medical assistant. Analyze the following input and determine if it is medically relevant or not.
 
