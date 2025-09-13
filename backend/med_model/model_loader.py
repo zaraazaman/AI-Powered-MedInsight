@@ -1,11 +1,11 @@
 import requests
-
 OLLAMA_URL = "http://localhost:11434/api/generate"
 
 class OllamaModel:
     def __init__(self, model_name):
         self.model_name = model_name
 
+    
     def generate_response(self, prompt):
         payload = {
             "model": self.model_name,
@@ -16,6 +16,8 @@ class OllamaModel:
         response = requests.post(OLLAMA_URL, json=payload)
         response.raise_for_status()
         return response.json()["response"]
+
+
 
 def load_model(task_type):
     if task_type in ["diagnosis", "treatment"]:
