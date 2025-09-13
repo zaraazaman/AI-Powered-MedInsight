@@ -59,14 +59,11 @@ class MedicalOrchestrator:
     def analyze_query_intent(self, user_input: str) -> Dict[str, any]:
         prompt = f"""
             You are a medical AI coordinator. Analyze the following user input and determine:
-
             1. Primary intent (diagnosis, treatment, monitoring, reporting, emergency)
             2. Urgency level (low, medium, high, emergency)
             3. Required specialist consultation (general, cardiology, neurology, pharmacology, etc.)
             4. Patient data needed (symptoms, history, vitals, medications)
-
             User Input: "{user_input}"
-
             Respond in JSON format:
             {{
                 "intent": "diagnosis|treatment|monitoring|reporting|emergency",
@@ -76,6 +73,7 @@ class MedicalOrchestrator:
                 "workflow_steps": ["step1", "step2", "step3"]
             }}
             """
+            
         try:
             response = self.model.generate_response(prompt)
             json_start = response.find('{')
@@ -84,7 +82,6 @@ class MedicalOrchestrator:
                 return json.loads(response[json_start:json_end])
         except:
             pass
-
         user_lower = user_input.lower()
         if any(word in user_lower for word in ['pain', 'hurt', 'ache', 'symptom']):
             return {
@@ -101,6 +98,8 @@ class MedicalOrchestrator:
             "data_needed": ["symptoms"],
             "workflow_steps": ["validate_input", "diagnose"]
         }
+
+
 
     def coordinate_diagnosis_workflow(self, symptoms: str) -> Tuple[str, str, Dict]:
         workflow_log = {
@@ -151,7 +150,6 @@ class MedicalOrchestrator:
         return primary_diagnosis, treatment_plan, workflow_log
 
     def coordinate_monitoring_workflow(self, patient_id: str) -> Tuple[str, Optional[str]]:
-        """Run monitoring agent on existing patient history."""
         summary, chart_path = monitoring_agent.analyze_patient_history(patient_id)
         self.context.add_interaction("monitoring", summary, "monitoring_agent")
         return summary, chart_path
@@ -173,14 +171,14 @@ class MedicalOrchestrator:
                 return specialty
         return None
 
+
+
     def validate_treatment_safety(self, symptoms: str, diagnosis: str, treatment: str) -> Dict[str, any]:
         prompt = f"""
                 You are a medical safety validator. Analyze this treatment plan for potential safety concerns:
-
                 Symptoms: {symptoms}
                 Diagnosis: {diagnosis}  
                 Treatment: {treatment}
-
                 Check for:
                 1. Dangerous drug interactions
                 2. Contraindications
@@ -195,6 +193,7 @@ class MedicalOrchestrator:
                     "risk_level": "low|medium|high|critical"
                 }}
                 """
+                
         try:
             response = self.model.generate_response(prompt)
             json_start = response.find('{')
@@ -204,24 +203,3 @@ class MedicalOrchestrator:
         except:
             pass
         return {"safe": True, "warning": "", "risk_level": "low"}
-
-#     def get_workflow_summary(self) -> str:
-#         return f"""
-# 🔄 **Medical AI Workflow Summary**
-
-# **Patient Context:**
-# {self.context.get_context_summary()}
-
-# **Agents Consulted:**
-# {', '.join(self.context.specialist_consultations.keys()) if self.context.specialist_consultations else 'Primary care team'}
-
-# **Workflow Steps Completed:**
-# {len(self.context.conversation_history)} diagnostic steps
-
-# **Confidence Level:** Based on symptom clarity and agent consensus
-
-# **Next Recommended Actions:**
-# - Monitor symptom progression
-# - Follow treatment plan as prescribed  
-# - Seek immediate care if symptoms worsen
-# """
